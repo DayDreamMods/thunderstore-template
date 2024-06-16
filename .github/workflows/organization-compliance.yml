@@ -27,6 +27,13 @@ jobs:
 
             return request.data.template_repository;
 
+  print:
+    runs-on: ubuntu-latest
+    needs: get-template-repo
+    steps:
+      - run: |
+          echo '${{ needs.get-template-repo.outputs.template_repository }}'
+
   check-diff:
     needs: get-template-repo
     if: ${{ needs.get-template-repo.outputs.template_repository != 'null' }}

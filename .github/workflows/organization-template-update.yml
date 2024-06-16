@@ -23,6 +23,8 @@ jobs:
               throw new Exception('Bad API response: ' + request.status);
 
             var repos = request.data.filter(i => !i.archived && !i.private).map(i => i.full_name);
-            console.log(request.data.filter(i => !i.archived && !i.private));
+            console.log(request.data.filter(i => !i.archived && !i.private).map(i => await github.rest.repos.get({
+              owner: i.owner.login, repo: i.name
+            })));
             return repos;
              

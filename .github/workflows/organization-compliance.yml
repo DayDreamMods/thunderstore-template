@@ -14,7 +14,7 @@ jobs:
       CUR_REPO: ${{ github.repository }}
     steps:
       - name: Copy On Rulesets
-        uses: RedEyeMods/copy-rulesets-action@2024.6.4
+        uses: RedEyeMods/copy-rulesets-action@2024.6.6
         with:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github
@@ -23,7 +23,7 @@ jobs:
           ruleset-enabled: true
           overwrite: true
       - name: Copy Off Rulesets
-        uses: RedEyeMods/copy-rulesets-action@2024.6.4
+        uses: RedEyeMods/copy-rulesets-action@2024.6.6
         with:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github

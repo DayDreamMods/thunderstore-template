@@ -19,7 +19,6 @@ jobs:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github
           regex-filter: '✓+.*'
-          name-format: '[WF] ${name}'
           ruleset-enabled: true
           overwrite: true
       - name: Copy Off Rulesets
@@ -28,7 +27,6 @@ jobs:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github
           regex-filter: '✗+.*'
-          name-format: '[WF] ${name}'
           ruleset-enabled: false
           overwrite: true
           

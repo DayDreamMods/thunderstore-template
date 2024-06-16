@@ -51,6 +51,7 @@ jobs:
           token: ${{ secrets.ORG_PAT }}
           repository: ${{ matrix.target-repo.full_name }}
           ref: ${{ matrix.target-repo.default_branch }}
+          fetch-depth: 0
 
       - uses: crazy-max/ghaction-import-gpg@v6
         with:

@@ -7,6 +7,11 @@ on:
       - '**'
 
 jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo '${{ github.event.repository.template_repository }}'
   check-diff:
     if: ${{ github.event.repository.template_repository }}
     runs-on: ubuntu-latest

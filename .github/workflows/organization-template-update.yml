@@ -45,6 +45,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.ORG_PAT }}
           repository: ${{ matrix.target-repo.full_name }}
           ref: ${{ matrix.target-repo.default_branch }}
 
@@ -70,7 +71,6 @@ jobs:
           git diff ${{ env.PR_BRANCH }} ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           
-      
       - name: Create PR
         if: ${{ steps.merge.outputs.GIT_DIFF != ''}}
         env:

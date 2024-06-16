@@ -18,7 +18,7 @@ jobs:
         with:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github
-          regex-filter: '(?:\[ONN\])+.*'
+          regex-filter: '✓+.*'
           name-format: '[WF] ${name}'
           ruleset-enabled: true
           overwrite: true
@@ -27,12 +27,11 @@ jobs:
         with:
           owner-token: ${{ secrets.ORG_PAT }}
           source-repo: RedEyeMods/.github
-          regex-filter: '(?:\[OFF\])+.*'
+          regex-filter: '✗+.*'
           name-format: '[WF] ${name}'
           ruleset-enabled: false
           overwrite: true
           
-            
       - name: Copy Labels
         uses: actions/github-script@v7
         with:

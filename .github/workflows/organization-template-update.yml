@@ -46,4 +46,29 @@ jobs:
           repository: ${{ matrix.target-repo.full_name }}
           ref: ${{ github.event.repository.default_branch }}
 
-             
+      - uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Merge Remote
+        id: merge
+        env:
+          PR_BRANCH: Update Template ${{ matrix.target-repo.name }}
+          REMOTE_FULLNAME: ${{ matrix.target-repo.full_name }}
+          REMOTE_DEFAULT_BRANCH: ${{ matrix.target-repo.default_branch }}
+        run: |
+          git checkout ${{ env.PR_BRANCH }} 2>/dev/null || git checkout -b ${{ env.PR_BRANCH }}
+          git remote add ${{ env.REMOTE_FULLNAME }} https://github.com/${{ env.REMOTE_FULLNAME }}.git
+          git fetch ${{ env.REMOTE_FULLNAME }} ${{ env.REMOTE_DEFAULT_BRANCH}}
+          git merge -X theirs --allow-unrelated-histories ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}}
+
+          echo 'GIT_DIFF<<EOF' >> $GITHUB_OUTPUT
+          git diff ${{ env.PR_BRANCH }} ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}} >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          
+      - env:
+          DIFF: ${{ steps.merge.outputs.GIT_DIFF }}
+        run: cat $DIFF

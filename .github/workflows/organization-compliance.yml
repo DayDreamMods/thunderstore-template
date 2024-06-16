@@ -1,4 +1,4 @@
-name: Repository Setup
+name: Settings Sync
 
 on: 
   workflow_dispatch:
@@ -7,8 +7,25 @@ on:
       - '**'
 
 jobs:
+  check-diff:
+    if: ${{ github.event.repository.template_repository }}
+    runs-on: ubuntu-latest
+    outputs:
+      COMPLIANCE_CHANGED: ${{ steps.filter.outputs.compliance }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: main
+          filters: |
+            compliance:
+              - '.github/workflows/organization-compliance.yml'
+
   run-init:
-    name: Initial Repository Setup
+    name: Repository Settings Synchronization
+    needs: check-diff
+    if: ${{ needs.check-diff.outputs.COMPLIANCE_CHANGED == 'true' }}
     runs-on: ubuntu-latest
     env:
       CUR_REPO: ${{ github.repository }}
@@ -101,13 +118,3 @@ jobs:
               console.error(error);
               process.exit(1);
             });
-            
-  one-time:
-    name: Execute One Time
-    runs-on: ubuntu-latest
-    steps:
-      - name: Disable Workflow
-        run: |
-          gh workflow disable -R $GITHUB_REPOSITORY "${{ github.workflow }}"
-        env:
-          GITHUB_TOKEN: ${{ github.token }}

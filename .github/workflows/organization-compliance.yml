@@ -7,13 +7,34 @@ on:
       - main
 
 jobs:
+  get-template-repo:
+    name: Parent Template Repository
+    runs-on: ubuntu-latest
+    outputs:
+      template_repository: ${{ steps.org-grab.outputs.result }}
+    steps:
+      - name: Get Organization Data
+        id: org-grab
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ORG_PAT }}
+          script: |
+            var request = await github.request(`GET ${context.payload.organization.repos_url.replace('https://api.github.com', '')}`);
+            if (request.status != 200)
+              throw new Exception('Bad API response: ' + request.status);
+
+            return request.data.template_repository;
+
   print:
+    needs: get-template-repo
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo '${{ toJson(github.event.repository.template_repository) }}'
+          echo '${{ toJson(needs.get-template-repo.outputs.template_repository) }}'
+
   check-diff:
-    if: ${{ toJson(github.event.repository.template_repository) != 'null' }}
+    needs: get-template-repo
+    if: ${{ toJson(needs.get-template-repo.outputs.template_repository) != 'null' }}
     runs-on: ubuntu-latest
     outputs:
       COMPLIANCE_CHANGED: ${{ steps.filter.outputs.compliance }}

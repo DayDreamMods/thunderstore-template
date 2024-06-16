@@ -24,7 +24,7 @@ jobs:
 
             var repos = request.data.filter(i => !i.archived && !i.private).map(i => i.full_name);
             console.log(
-              request.data.filter(i => !i.archived && !i.private)
+              await request.data.filter(i => !i.archived && !i.private)
                 .map(async i => await github.rest.repos.get({
                   owner: i.owner.login, repo: i.name
                 }))

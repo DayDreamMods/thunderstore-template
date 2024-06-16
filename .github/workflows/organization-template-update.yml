@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       repositories: ${{ steps.org-grab.outputs.result }}
+      repositories-length: ${{ steps.org-grab.outputs.repositories-length }}
     env:
       this_repo: ${{ github.repository }}
     steps:
@@ -30,12 +31,13 @@ jobs:
                 })))).map(i => i.data)
                 .filter(i => !i.archived && !i.private && 
                         i.template_repository != null && i.template_repository.full_name == process.env.this_repo);
+            core.setOutput('repositories-length', repos.length);
             return repos;
 
   update-matrix:
     name: Update ${{ matrix.target-repo.full_name }}
     needs: get-repositories
-    if: ${{ !contains(needs.get-repositories.outputs.repositories, '[]') }}
+    if: ${{ needs.get-repositories.outputs.repositories-length != '0' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:

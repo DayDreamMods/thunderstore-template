@@ -35,6 +35,7 @@ jobs:
   update-matrix:
     name: Update ${{ matrix.target-repo.full_name }}
     needs: get-repositories
+    if: ${{ fromJson(needs.get-repositories.outputs.repositories).length > 0 }}
     runs-on: ubuntu-latest
     strategy:
       matrix:

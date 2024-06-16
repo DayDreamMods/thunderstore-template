@@ -39,12 +39,14 @@ jobs:
     strategy:
       matrix:
         target-repo: ${{ fromJson(needs.get-repositories.outputs.repositories) }}
+    env:
+      PR_BRANCH: updated/template/${{ github.event.repository.name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           repository: ${{ matrix.target-repo.full_name }}
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ matrix.target-repo.default_branch }}
 
       - uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -56,7 +58,6 @@ jobs:
       - name: Merge Remote
         id: merge
         env:
-          PR_BRANCH: updated/template/${{ github.event.repository.name }}
           REMOTE_FULLNAME: ${{ github.repository }}
           REMOTE_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
@@ -69,6 +70,11 @@ jobs:
           git diff ${{ env.PR_BRANCH }} ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           
-      - env:
-          DIFF: ${{ steps.merge.outputs.GIT_DIFF }}
-        run: cat $DIFF
+      
+      - name: Create PR
+        if: ${{ steps.merge.outputs.GIT_DIFF != ''}}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git push
+          gh pr create --base ${{ matrix.target-repo.default_branch }} --head ${{ env.PR_BRANCH }} --title "Update Template ${{ matrix.target-repo.name }}" --body "" || echo "PR already exists or another error occurred"

@@ -31,6 +31,9 @@ jobs:
                 .filter(i => !i.archived && !i.private && 
                         i.template_repository != null && i.template_repository.full_name == process.env.this_repo);
             return repos;
+            
+      - run: |
+          echo '${{ steps.org-grab.outputs.result }}'
 
   update-matrix:
     name: Update ${{ matrix.target-repo.full_name }}

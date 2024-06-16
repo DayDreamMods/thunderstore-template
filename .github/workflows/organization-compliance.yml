@@ -7,6 +7,11 @@ on:
       - main
 
 jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo '${{ toJson(github.event.repository.template_repository) }}'
   check-diff:
     if: ${{ toJson(github.event.repository.template_repository) != 'null' }}
     runs-on: ubuntu-latest

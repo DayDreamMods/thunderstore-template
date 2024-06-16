@@ -27,13 +27,6 @@ jobs:
 
             return request.data.template_repository;
 
-  print:
-    needs: get-template-repo
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo '${{ toJson(needs.get-template-repo.outputs.template_repository) }}'
-
   check-diff:
     needs: get-template-repo
     if: ${{ toJson(needs.get-template-repo.outputs.template_repository) != 'null' }}

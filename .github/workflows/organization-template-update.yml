@@ -23,11 +23,11 @@ jobs:
               throw new Exception('Bad API response: ' + request.status);
 
             var repos = request.data.filter(i => !i.archived && !i.private).map(i => i.full_name);
-            console.log(await Promise.all(
+            console.log((await Promise.all(
               request.data.filter(i => !i.archived && !i.private)
                 .map(async i => await github.rest.repos.get({
                   owner: i.owner.login, repo: i.name
-                }))).map(i => i.data)
+                })))).map(i => i.data)
             );
             return repos;
              

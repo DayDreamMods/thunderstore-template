@@ -8,6 +8,7 @@ on:
 jobs:
   get-repositories:
     name: Organization Repositories
+    if: ${{ github.event.repository.is_template }}
     runs-on: ubuntu-latest
     outputs:
       repositories: ${{ steps.org-grab.outputs.result }}

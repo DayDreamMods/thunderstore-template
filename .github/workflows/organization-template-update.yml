@@ -22,12 +22,24 @@ jobs:
             if (request.status != 200)
               throw new Exception('Bad API response: ' + request.status);
 
-            var repos = request.data.filter(i => !i.archived && !i.private).map(i => i.full_name);
-            console.log((await Promise.all(
-              request.data.filter(i => !i.archived && !i.private)
-                .map(async i => await github.rest.repos.get({
+            var repos = (await Promise.all(
+              request.data.map(async i => await github.rest.repos.get({
                   owner: i.owner.login, repo: i.name
-                })))).map(i => i.data)
-            );
+                })))).map(i => i.data).filter(i => !i.archived && !i.private && i.template_repository != null);
             return repos;
+
+  update-matrix:
+    name: Update Matrix
+    needs: get-repositories
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target-repo: ${{ fromJson(needs.get-repositories.outputs.repositories) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.target-repo }}
+          ref: ${{ github.event.repository.default_branch }}
+
              

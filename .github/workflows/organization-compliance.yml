@@ -8,7 +8,7 @@ on:
 
 jobs:
   check-diff:
-    if: ${{ github.event.repository.template_repository != '' }}
+    if: ${{ github.event.repository.template_repository.full_name != '' }}
     runs-on: ubuntu-latest
     outputs:
       COMPLIANCE_CHANGED: ${{ steps.filter.outputs.compliance }}

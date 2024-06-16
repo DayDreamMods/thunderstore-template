@@ -56,7 +56,7 @@ jobs:
       - name: Merge Remote
         id: merge
         env:
-          PR_BRANCH: Update Template ${{ matrix.target-repo.name }}
+          PR_BRANCH: updated/template/${{ matrix.target-repo.name }}
           REMOTE_FULLNAME: ${{ matrix.target-repo.full_name }}
           REMOTE_DEFAULT_BRANCH: ${{ matrix.target-repo.default_branch }}
         run: |

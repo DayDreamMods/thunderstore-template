@@ -7,13 +7,8 @@ on:
       - '**'
 
 jobs:
-  print:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo '${{ toJson(github.event.repository.template_repository) }}'
   check-diff:
-    if: ${{ github.event.repository.template_repository }}
+    if: ${{ toJson(github.event.repository.template_repository) != 'null' }}
     runs-on: ubuntu-latest
     outputs:
       COMPLIANCE_CHANGED: ${{ steps.filter.outputs.compliance }}

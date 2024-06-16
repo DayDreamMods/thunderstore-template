@@ -39,7 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          repository: ${{ matrix.target-repo }}
+          repository: ${{ matrix.target-repo.full_name }}
           ref: ${{ github.event.repository.default_branch }}
 
              

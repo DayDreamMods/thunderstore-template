@@ -27,7 +27,7 @@ jobs:
               request.data.filter(i => !i.archived && !i.private)
                 .map(async i => await github.rest.repos.get({
                   owner: i.owner.login, repo: i.name
-                })))
+                }))).map(i => i.data)
             );
             return repos;
              

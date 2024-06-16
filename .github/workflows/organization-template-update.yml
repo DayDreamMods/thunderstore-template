@@ -56,9 +56,9 @@ jobs:
       - name: Merge Remote
         id: merge
         env:
-          PR_BRANCH: updated/template/${{ matrix.target-repo.name }}
-          REMOTE_FULLNAME: ${{ matrix.target-repo.full_name }}
-          REMOTE_DEFAULT_BRANCH: ${{ matrix.target-repo.default_branch }}
+          PR_BRANCH: updated/template/${{ github.event.repository.name }}
+          REMOTE_FULLNAME: ${{ github.repository }}
+          REMOTE_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           git checkout ${{ env.PR_BRANCH }} 2>/dev/null || git checkout -b ${{ env.PR_BRANCH }}
           git remote add ${{ env.REMOTE_FULLNAME }} https://github.com/${{ env.REMOTE_FULLNAME }}.git

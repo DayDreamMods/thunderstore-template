@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       repositories: ${{ steps.org-grab.outputs.result }}
+    env:
+      this_repo: ${{ github.repository }}
     steps:
       - name: Get Organization Data
         id: org-grab
@@ -25,7 +27,9 @@ jobs:
             var repos = (await Promise.all(
               request.data.map(async i => await github.rest.repos.get({
                   owner: i.owner.login, repo: i.name
-                })))).map(i => i.data).filter(i => !i.archived && !i.private && i.template_repository != null);
+                })))).map(i => i.data)
+                .filter(i => !i.archived && !i.private && 
+                        i.template_repository != null && i.template_repository.full_name == process.env.this_repo);
             return repos;
 
   update-matrix:

@@ -29,7 +29,7 @@ jobs:
             return repos;
 
   update-matrix:
-    name: Update Matrix
+    name: Update ${{ matrix.target-repo.full_name }}
     needs: get-repositories
     runs-on: ubuntu-latest
     strategy:

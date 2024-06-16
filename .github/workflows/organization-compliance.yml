@@ -19,7 +19,9 @@ jobs:
         with:
           github-token: ${{ secrets.ORG_PAT }}
           script: |
-            var request = await github.request(`GET ${context.payload.organization.repos_url.replace('https://api.github.com', '')}`);
+            var request = await github.rest.repos.get({
+              ...context.repo
+            });
             if (request.status != 200)
               throw new Exception('Bad API response: ' + request.status);
 

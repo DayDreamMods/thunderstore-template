@@ -42,9 +42,17 @@ jobs:
 
       - id: data-interpreter
         run: |
-          echo 'TEMPLATE_REPO_JSON<<EOF' >> $GITHUB_OUTPUT
+          echo 'TEMPLATE_REPO_JSON<<EOF\n' >> $GITHUB_OUTPUT
           cat org-data.txt >> $GITHUB_OUTPUT
-          echo '\nEOF' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Save Organization Data
+        id: cache-repo-save
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            org-data.txt
+          key: ${{ steps.cache-repo-restore.outputs.cache-primary-key }}
 
   check-diff:
     needs: get-template-repo

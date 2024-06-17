@@ -20,7 +20,7 @@ jobs:
         with:
           path: |
             org-data.txt
-          key: ${{ runner.os }}-org-data
+          key: json-org-data
 
       - name: Get Organization Data
         if: steps.cache-repo-restore.outputs.cache-hit != 'true'
@@ -44,7 +44,7 @@ jobs:
         run: |
           echo 'TEMPLATE_REPO_JSON<<EOF' >> $GITHUB_OUTPUT
           cat org-data.txt >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          echo '\nEOF' >> $GITHUB_OUTPUT
 
   check-diff:
     needs: get-template-repo

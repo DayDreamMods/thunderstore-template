@@ -42,8 +42,9 @@ jobs:
 
       - id: data-interpreter
         run: |
-          echo 'TEMPLATE_REPO_JSON<<EOF\n' >> $GITHUB_OUTPUT
+          echo 'TEMPLATE_REPO_JSON<<EOF' >> $GITHUB_OUTPUT
           cat org-data.txt >> $GITHUB_OUTPUT
+          echo '\n' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Save Organization Data

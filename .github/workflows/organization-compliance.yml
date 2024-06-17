@@ -57,7 +57,7 @@ jobs:
 
   check-diff:
     needs: get-template-repo
-    if: ${{ needs.get-template-repo.outputs.template_repository != '' }}
+    if: ${{ needs.get-template-repo.outputs.template_repository != 'null' }}
     runs-on: ubuntu-latest
     outputs:
       COMPLIANCE_CHANGED: ${{ steps.filter.outputs.compliance }}

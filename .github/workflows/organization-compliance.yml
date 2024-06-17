@@ -51,7 +51,7 @@ jobs:
     needs: get-template-repo
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{ fromJson(needs.get-template-repo.outputs.template_repository) }}'
+      - run: echo '${{ fromJson(needs.get-template-repo.outputs.template_repository).template_repository }}'
   check-diff:
     needs: get-template-repo
     if: ${{ needs.get-template-repo.outputs.template_repository != 'null' }}

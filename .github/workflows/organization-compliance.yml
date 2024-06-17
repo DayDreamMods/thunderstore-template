@@ -36,7 +36,7 @@ jobs:
             if (request.status != 200)
               throw new Exception('Bad API response: ' + request.status);
 
-            var dataStringified = JSON.stringify(request.data.template_repository == undefined ? null : request.data.template_repository);
+            var dataStringified = JSON.stringify(request.data.template_repository == undefined ? {} : request.data.template_repository);
             console.log(dataStringified);
             fs.writeFileSync('org-data.txt', dataStringified);
 

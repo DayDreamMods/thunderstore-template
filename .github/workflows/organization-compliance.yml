@@ -36,8 +36,9 @@ jobs:
             if (request.status != 200)
               throw new Exception('Bad API response: ' + request.status);
 
+            console.log(JSON.stringify(request.data.template_repository));
             fs.writeFileSync('org-data.txt', JSON.stringify(request.data.template_repository));
-            
+
       - id: data-interpreter
         run: |
           echo 'TEMPLATE_REPO_JSON<<EOF' >> $GITHUB_OUTPUT

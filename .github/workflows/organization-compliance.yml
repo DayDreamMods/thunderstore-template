@@ -55,6 +55,11 @@ jobs:
             org-data.txt
           key: ${{ steps.cache-repo-restore.outputs.cache-primary-key }}
 
+  print:
+    needs: get-template-repo
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ needs.get-template-repo.outputs.template_repository }}'
   check-diff:
     needs: get-template-repo
     if: ${{ needs.get-template-repo.outputs.template_repository != 'null' }}

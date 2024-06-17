@@ -11,21 +11,38 @@ jobs:
     name: Parent Template Repository
     runs-on: ubuntu-latest
     outputs:
-      template_repository: ${{ steps.org-grab.outputs.result }}
+      template_repository: ${{ steps.data-interpreter.outputs.TEMPLATE_REPO_JSON }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Restore Cached Org Data
+        id: cache-repo-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            org-data.txt
+          key: ${{ runner.os }}-org-data
+
       - name: Get Organization Data
+        if: steps.cache-repo-restore.outputs.cache-hit != 'true'
         id: org-grab
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.ORG_PAT }}
           script: |
+            const fs = require('fs');
             var request = await github.rest.repos.get({
               ...context.repo
             });
             if (request.status != 200)
               throw new Exception('Bad API response: ' + request.status);
 
-            return request.data.template_repository;
+            fs.writeFileSync('org-data.txt', JSON.stringify(request.data.template_repository));
+            
+      - id: data-interpreter
+        run: |
+          echo 'TEMPLATE_REPO_JSON<<EOF' >> $GITHUB_OUTPUT
+          cat org-data.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
   check-diff:
     needs: get-template-repo

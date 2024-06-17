@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Restore Cached Org Data
         id: cache-repo-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: |
             org-data.txt
@@ -47,19 +47,11 @@ jobs:
           echo '\n' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-      - name: Save Organization Data
-        id: cache-repo-save
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            org-data.txt
-          key: ${{ steps.cache-repo-restore.outputs.cache-primary-key }}
-
   print:
     needs: get-template-repo
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{ needs.get-template-repo.outputs.template_repository }}'
+      - run: echo '${{ fromJson(needs.get-template-repo.outputs.template_repository) }}'
   check-diff:
     needs: get-template-repo
     if: ${{ needs.get-template-repo.outputs.template_repository != 'null' }}

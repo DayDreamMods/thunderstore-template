@@ -75,7 +75,7 @@ jobs:
           echo 'GIT_DIFF<<EOF' >> $GITHUB_OUTPUT
           git diff ${{ env.PR_BRANCH }} ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-          echo "${{ steps.merge.outputs.GIT_DIFF }}"
+          echo "$GITHUB_OUTPUT"
           
       - name: Create PR
         if: ${{ steps.merge.outputs.GIT_DIFF != ''}}

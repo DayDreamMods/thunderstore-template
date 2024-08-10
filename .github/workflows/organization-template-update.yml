@@ -75,13 +75,13 @@ jobs:
           echo 'GIT_DIFF<<EOF' >> $GITHUB_OUTPUT
           git diff ${{ env.PR_BRANCH }} ${{ env.REMOTE_FULLNAME }}/${{ env.REMOTE_DEFAULT_BRANCH}} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
+          echo "${{ steps.merge.outputs.GIT_DIFF }}"
           
       - name: Create PR
         if: ${{ steps.merge.outputs.GIT_DIFF != ''}}
         env:
           GH_TOKEN: ${{ secrets.ORG_PAT }}
         run: |
-          echo ${{ steps.merge.outputs.GIT_DIFF }}
           git push --set-upstream origin ${{ env.PR_BRANCH }}
           gh pr create --base ${{ matrix.target-repo.default_branch }} --head ${{ env.PR_BRANCH }} --title "Update Template '${{ github.event.repository.name }}'" --body "" || echo "PR already exists or another error occurred"
           gh pr view --json url -t '{{.url}}' >> $GITHUB_STEP_SUMMARY

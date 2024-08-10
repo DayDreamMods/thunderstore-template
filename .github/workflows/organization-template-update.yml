@@ -76,10 +76,6 @@ jobs:
           git diff ${{ env.PR_BRANCH }} ${{ matrix.target-repo.default_branch }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           
-      - name: ECHO
-        run: |
-          echo "${{ steps.merge.outputs.GIT_DIFF }}"
-          
       - name: Create PR
         if: ${{ steps.merge.outputs.GIT_DIFF != ''}}
         env:

@@ -18,4 +18,4 @@ jobs:
         uses: nicklegan/github-repo-branch-naming-policy-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          regex: '(?:(?:(?:added){1}|(?:changed){1}|(?:deprecated){1}|(?:removed){1}|(?:fixed){1}|(?:secured){1})(\/[a-z\d-]+)+|(main)|(mergeable\/[a-z\d-]+))$'
+          regex: '(?:(?:(?:added){1}|(?:changed){1}|(?:deprecated){1}|(?:removed){1}|(?:fixed){1}|(?:secured){1}|(?:updated){1})(\/[a-z\d-]+)+|(main))$'
